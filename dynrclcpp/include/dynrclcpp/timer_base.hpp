@@ -6,27 +6,38 @@
 #include <chrono>
 #include <functional>
 
-// namespace dynrclcpp
-// {
 
 
 class Timer : public std::enable_shared_from_this<Timer>{
 public:
+    template <typename Rep, typename Period>
     static std::shared_ptr<Timer> 
     create(std::function<void()> callback,  
-    const std::chrono::duration<long, 
-    std::ratio<1l, 1l>>& duration);
+    const std::chrono::duration<Rep, Period>& duration){
+        return std::shared_ptr<Timer>(new Timer(std::move(callback), duration));
+    }
 
     ~Timer();
 
     void stop();
 
 private:
-    template <typename Duration>
-    Timer(std::function<void()> callback, const Duration& duration); 
+    template <typename Rep, typename Period>
+    Timer(std::function<void()> callback, const std::chrono::duration<Rep, Period>& duration){
+        callback_ = std::move(callback);
+        timerThread_ = std::thread(&Timer::timerFunction<Rep, Period>, this, duration);
+    }
 
-    template <typename Duration>
-    void timerFunction(const Duration& duration);
+    template <typename Rep, typename Period>
+    void timerFunction(const std::chrono::duration<Rep, Period>& duration)
+    {
+        stopFlag_ = false;
+        while(true){
+            std::this_thread::sleep_for(duration);
+            if(!stopFlag_) callback_();
+            else break;
+        }        
+    }
 
     std::function<void()> callback_;
     std::thread timerThread_;
@@ -34,7 +45,7 @@ private:
 
 };
     
-// } // namespace dynrclcpp
+
 
 
 

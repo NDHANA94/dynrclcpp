@@ -43,6 +43,8 @@ void DynPublisher::publish(std::string& msg_yaml){
 }
 
 void DynPublisher::destroy(){
+  if(timer != nullptr) timer->stop();
+  
   auto ret = rcl_publisher_fini(&pub, node);
   if(ret!=RCL_RET_OK){
     std::string err = "failed to finalize publisher for topic '" + topic + "'. " + std::string(rcl_get_error_string().str);

@@ -1,8 +1,12 @@
 #ifndef _DYN_PUBLISHER_HPP__
 #define _DYN_PUBLISHER_HPP__
 
+#include <memory>
+
 #include "dynrclcpp/typesupport_utils.hpp"
+#include "dynrclcpp/timer_base.hpp"
 #include "rcl/rcl.h"
+
 
 class DynPublisher{
 public:
@@ -21,6 +25,7 @@ public:
 
     std::string topic;
     std::string type;
+    std::shared_ptr<Timer> timer;
 
     /// @brief Publish the topic
     /// @param msg_yaml : yaml formated message to publish
