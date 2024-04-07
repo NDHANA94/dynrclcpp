@@ -10,3 +10,22 @@ This library empowers developers with the ability to dynamically create and dest
 - **Ease of Use**: Simple and intuitive API for seamless integration into your ROS2 projects.
 - **Efficiency**: Optimize resource usage by creating and destroying communication entities as needed,
 
+
+
+
+
+<!-- 
+
+Done: 
+    - Create & destroy Node
+    - Create & destroy Publisher
+    - Create & destroy Subscription
+    - Create & destroy Timer
+    - Get nodes Info
+
+TODO:
+    - Create & destroy Service client
+    - Create & destroy Service server
+
+
+ -->
