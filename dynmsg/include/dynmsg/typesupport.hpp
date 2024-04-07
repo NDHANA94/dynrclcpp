@@ -22,6 +22,8 @@
 #include "rcutils/allocator.h"
 #include "rosidl_typesupport_introspection_c/message_introspection.h"
 #include "rosidl_typesupport_introspection_cpp/message_introspection.hpp"
+#include "rosidl_typesupport_introspection_c/service_introspection.h"
+#include "rosidl_typesupport_introspection_cpp/service_introspection.hpp"
 
 #include "dynmsg/types.h"
 
@@ -30,7 +32,7 @@ extern "C"
 // Structure used to store the type support for a single interface type
 using TypeSupport = rosidl_message_type_support_t;
 // Structure used to store the introspection information for a single interface type
-using TypeInfo_C = rosidl_typesupport_introspection_c__MessageMembers;
+using TypeInfo_C = rosidl_typesupport_introspection_c__MessageMembers; 
 // Structure used to store the introspection information for a single field of a interface type
 using MemberInfo_C = rosidl_typesupport_introspection_c__MessageMember;
 
@@ -55,6 +57,7 @@ using MemberInfo = MemberInfo_C;
 using RosMessage = RosMessage_C;
 
 typedef const rosidl_message_type_support_t * (* get_message_ts_func)();
+typedef const rosidl_service_type_support_t* (* get_service_ts_func)();
 
 // An interface type can be identified by its namespace (i.e. the package that stores it) and its
 // type name

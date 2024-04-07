@@ -14,8 +14,8 @@
   limitations under the License.
 -----------------------------------------------------------------------------*/ 
 
-#ifndef _DYN_PUBLISHER_HPP__
-#define _DYN_PUBLISHER_HPP__
+#ifndef _DYN_PUBLISHER_BASE_HPP__
+#define _DYN_PUBLISHER_BASE_HPP__
 
 #include <memory>
 
@@ -24,20 +24,22 @@
 #include "rcl/rcl.h"
 
 
-class DynPublisher{
+namespace dynrclcpp{
+
+class Publisher{
 public:
     /// @brief Constructor
     /// @param topic_ : topic name as a string
     /// @param type_ : msg type as a string. Ex: "std_msgs/msg/String"
     /// @param node_ : refernece to the created node
     /// @param qos_ : rmw_qos_profile: 
-    DynPublisher(std::string topic_, 
+    Publisher(std::string topic_, 
     std::string type_, 
     rcl_node_t* node_, 
     rmw_qos_profile_t qos_);
 
     /// @brief Deconstructor
-    ~DynPublisher(){};
+    ~Publisher(){};
 
     std::string topic;
     std::string type;
@@ -59,7 +61,9 @@ private:
     rmw_qos_profile_t qos;
 };
 
-#endif //_DYN_PUBLISHER_HPP__
+} //dynrclcpp
+
+#endif //_DYN_PUBLISHER_BASE_HPP__
 
 
     

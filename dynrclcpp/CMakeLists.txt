@@ -26,8 +26,8 @@ find_package(ament_index_cpp REQUIRED)
 add_library(dynrclcpp STATIC
   src/node_base.cpp
   src/timer_base.cpp
-  src/dyn_publisher.cpp
-  src/dyn_subscription.cpp
+  src/publisher_base.cpp
+  src/subscription_base.cpp
   src/typesupport_utils.cpp
 )
 

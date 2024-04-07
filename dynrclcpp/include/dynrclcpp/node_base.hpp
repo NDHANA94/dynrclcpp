@@ -25,10 +25,13 @@
 #include <yaml-cpp/yaml.h> //sudo apt install libyaml-cpp-dev 
 #include <nlohmann/json.hpp> //sudo apt install nlohmann-json3-dev
 
-#include "dynrclcpp/dyn_subscription.hpp"
-#include "dynrclcpp/dyn_publisher.hpp"
+#include "dynrclcpp/subscription_base.hpp"
+#include "dynrclcpp/publisher_base.hpp"
 #include "dynrclcpp/timer_base.hpp"
+
 #include "dynrclcpp/typesupport_utils.hpp"
+
+#include "dynmsg/message_reading.hpp"
 
 #include "rcutils/logging.h"
 #include "rcutils/logging_macros.h"
@@ -37,6 +40,13 @@
 #include "rcl/rcl.h"
 
 #include "rmw/qos_profiles.h"
+
+#define QOS_DEFAULT rmw_qos_profile_default 
+#define QOS_PARAMS_EVENTS rmw_qos_profile_parameter_events 
+#define QOS_PARAMS rmw_qos_profile_parameters 
+#define QOS_SENSOR_DATA rmw_qos_profile_sensor_data 
+#define QOS_SERVICE_DEFAULT rmw_qos_profile_services_default 
+#define QOS_SYSTEM_DEFAULT rmw_qos_profile_system_default
 
 namespace dynrclcpp{
 
@@ -77,7 +87,7 @@ public:
     /// @param qos_ : rmw_qos_profile
     /// @param callback_ : callback function to be invoked when a msg is received
     /// @return shared_ptr of created subscription object or a nullptr (if failed)
-    std::shared_ptr<DynSubscription> create_subscription(
+    std::shared_ptr<Subscription> create_subscription(
         const std::string& topic_,
         const std::string& type_,
         rmw_qos_profile_t qos_,
@@ -89,7 +99,7 @@ public:
     /// @param qos_ : rmw_qos_profile
     /// @param callback_ : callback function to be invoked when a msg is received
     /// @return shared_ptr of created subscription object or a nullptr (if failed)
-    std::shared_ptr<DynSubscription> create_subscription(
+    std::shared_ptr<Subscription> create_subscription(
         const std::string& topic_,
         rmw_qos_profile_t qos_,
         std::function<void(RosMessage msg)> callback_);
@@ -103,7 +113,7 @@ public:
     /// @brief 
     /// @param topic 
     /// @param type 
-    std::shared_ptr<DynPublisher> create_publisher(
+    std::shared_ptr<Publisher> create_publisher(
         const std::string& topic,
         const std::string& type,
         rmw_qos_profile_t qos_);
@@ -160,10 +170,6 @@ public:
     
 
 
-
-    void spin();
-
-
     const std::string node_name;
 private:
     /// @brief to execute cli command 
@@ -185,14 +191,20 @@ private:
 
     bool shutdown{false};
    
-    //    map< pair< topic, type >, entity >
-    std::map<std::pair<std::string, std::string>, std::shared_ptr<DynSubscription>> sub_registry;
-    //    map< pair< topic, type >, entity >
-    std::map<std::pair<std::string, std::string>, std::shared_ptr<DynPublisher>> pub_registry;
+    //    map< pair< topic, type >, Subscription >
+    std::map<std::pair<std::string, std::string>, std::shared_ptr<Subscription>> sub_registry;
+    //    map< pair< topic, type >, Publisher >
+    std::map<std::pair<std::string, std::string>, std::shared_ptr<Publisher>> pub_registry;
+    //   map<client name, Client>
+    
     //  map<key, Timer>
     std::map<std::string, std::shared_ptr<Timer>> timer_registry;
 
 };
+
+
+
+void spin();
 
 }
 

@@ -14,8 +14,8 @@
   limitations under the License.
 -----------------------------------------------------------------------------*/ 
 
-#ifndef _DYN_TIMER_HPP__
-#define _DYN_TIMER_HPP__
+#ifndef _DYN_TIMER_BASE_HPP__
+#define _DYN_TIMER_BASE_HPP__
 
 #include <thread>
 #include <atomic>
@@ -23,6 +23,7 @@
 #include <functional>
 
 
+namespace dynrclcpp{
 
 class Timer : public std::enable_shared_from_this<Timer>{
 public:
@@ -63,6 +64,6 @@ private:
     
 
 
+} //dynrclcpp
 
-
-#endif //_DYN_TIMER_HPP__
+#endif //_DYN_TIMER_BASE_HPP__

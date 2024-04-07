@@ -21,7 +21,7 @@
 
 #include "dynrclcpp/timer_base.hpp"
 
-
+namespace dynrclcpp{
 
 Timer::~Timer(){
     stopFlag_ = true;
@@ -33,3 +33,5 @@ Timer::~Timer(){
 void Timer::stop(){
     stopFlag_ = true;
 }
+
+} //dynrclcpp

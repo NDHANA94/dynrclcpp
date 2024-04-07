@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-#include "dynrclcpp/dyn_subscription.hpp"
+#include "dynrclcpp/subscription_base.hpp"
 
 #include "rcutils/logging.h"
 #include "rcutils/logging_macros.h"
@@ -26,8 +26,9 @@
 #include "dynmsg/message_reading.hpp"
 
 
+namespace dynrclcpp {
 
-DynSubscription::DynSubscription(
+Subscription::Subscription(
 const std::string& topic_, 
 const std::string& type_,
 rcl_node_t* node_,
@@ -41,14 +42,8 @@ std::function<void(RosMessage msg)> callback_
     qos  = qos_;
     callback = callback_;
 
-    interface_type_name = get_topic_type_from_string_type(type); 
-    if(interface_type_name.first == "" || interface_type_name.second == ""){
-        std::string err = "Unknown topic type: " + interface_type_name.first + "/" + interface_type_name.second;
-        throw std::runtime_error(err.c_str());
-    }
-    RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "topic type is retrieved: %s/%s", interface_type_name.first.c_str(), interface_type_name.second.c_str());
 
-    type_support = get_type_support(interface_type_name);
+    type_support = get_msg_type_support(type_);
     if(type_support == nullptr) throw std::runtime_error("got a nullptr as type_support");
     sub = rcl_get_zero_initialized_subscription();
     options = rcl_subscription_get_default_options();
@@ -57,7 +52,7 @@ std::function<void(RosMessage msg)> callback_
     options.qos = qos;
     
     // initialize msg
-    
+    interface_type_name = get_interface_type_name_from_type(type);
     if(DYNMSG_RET_OK != dynmsg::c::ros_message_init(interface_type_name, &msg)){
         std::string err = interface_type_name.first + "/" + interface_type_name.second + " msg init failed in topic echo";
         throw std::runtime_error(err.c_str());
@@ -78,7 +73,7 @@ std::function<void(RosMessage msg)> callback_
 
 
 
-void DynSubscription::subscribe(){
+void Subscription::subscribe(){
     if(is_initialized){
         std::thread([this](){
             try{
@@ -95,7 +90,7 @@ void DynSubscription::subscribe(){
 
 
 
-void DynSubscription::count_publishers(){
+void Subscription::count_publishers(){
   auto start_time = std::chrono::steady_clock::now();
   while(!stopFlag){
     auto ret = rmw_subscription_count_matched_publishers(rcl_subscription_get_rmw_handle(&sub), &count_pubs);
@@ -119,7 +114,7 @@ void DynSubscription::count_publishers(){
 
 
 
-void DynSubscription::read_msg(std::function<void(RosMessage msg)> callback_){
+void Subscription::read_msg(std::function<void(RosMessage msg)> callback_){
     // rmw_take (read msg)
     bool taken = false;
     while (!stopFlag && count_pubs>0){ //.load(std::memory_order_acquire)){
@@ -148,6 +143,8 @@ void DynSubscription::read_msg(std::function<void(RosMessage msg)> callback_){
 
 
 
-void DynSubscription::destroy(){
+void Subscription::destroy(){
     stopFlag = true;
 }
+
+} //dynrclcpp

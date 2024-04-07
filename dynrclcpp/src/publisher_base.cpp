@@ -16,7 +16,7 @@
 
 
 
-#include "dynrclcpp/dyn_publisher.hpp"
+#include "dynrclcpp/publisher_base.hpp"
 
 #include "dynmsg/yaml_utils.hpp"
 #include "dynmsg/msg_parser.hpp"
@@ -25,15 +25,16 @@
 
 #include "rcutils/logging_macros.h"
 
+namespace dynrclcpp{
 
-
-DynPublisher::DynPublisher(std::string topic_, std::string type_, rcl_node_t* node_, rmw_qos_profile_t qos_ = rmw_qos_profile_default):
+Publisher::Publisher(std::string topic_, std::string type_, rcl_node_t* node_, rmw_qos_profile_t qos_ = rmw_qos_profile_default):
 topic(topic_),  type(type_), node(node_), qos(qos_)
 {
-    interface_type_name = get_topic_type_from_string_type(type_);
-    type_support = get_type_support(interface_type_name);
+    
+    type_support = get_msg_type_support(type_);
     pub = rcl_get_zero_initialized_publisher();
     options = rcl_publisher_get_default_options();
+    interface_type_name = get_interface_type_name_from_type(type_);
 
     // set qos
     options.qos = qos;
@@ -47,7 +48,7 @@ topic(topic_),  type(type_), node(node_), qos(qos_)
     RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "successfully initialized");
 }
 
-void DynPublisher::publish(std::string& msg_yaml){
+void Publisher::publish(std::string& msg_yaml){
   RosMessage msg = dynmsg::c::yaml_to_rosmsg(this->interface_type_name, msg_yaml);
   auto ret = rcl_publish(&pub, msg.data, nullptr);
   if(ret!=RCL_RET_OK){
@@ -57,7 +58,7 @@ void DynPublisher::publish(std::string& msg_yaml){
   RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "published: %s", msg_yaml.c_str());
 }
 
-void DynPublisher::destroy(){
+void Publisher::destroy(){
   if(timer != nullptr) timer->stop();
   
   auto ret = rcl_publisher_fini(&pub, node);
@@ -67,3 +68,5 @@ void DynPublisher::destroy(){
   }
   RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "successfully destroyed");
 }
+
+} //dynrclcpp

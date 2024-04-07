@@ -14,8 +14,8 @@
   limitations under the License.
 -----------------------------------------------------------------------------*/ 
 
-#ifndef _DYN_SUBSCRIPTION_HPP__
-#define _DYN_SUBSCRIPTION_HPP__
+#ifndef _DYN_SUBSCRIPTION_BASE_HPP__
+#define _DYN_SUBSCRIPTION_BASE_HPP__
 
 #include <string>
 #include <thread>
@@ -28,7 +28,11 @@
 
 #include "rcl/rcl.h"
 
-class DynSubscription{
+
+namespace dynrclcpp {
+
+
+class Subscription{
 public:
     std::string topic;
     std::string type;
@@ -40,7 +44,7 @@ public:
     /// @param node_ : pointer to the initialized node
     /// @param qos_ : rmw_qos_profile
     /// @param callback_ :callback function
-    DynSubscription(
+    Subscription(
     const std::string& topic_, 
     const std::string& type_,
     rcl_node_t* node_,
@@ -50,7 +54,7 @@ public:
     
 
     // Deconstructor
-    ~DynSubscription(){};
+    ~Subscription(){};
 
     /// @brief  To execute subscription process.
     /// @brief This will run on a separate thread.
@@ -87,4 +91,7 @@ private:
     
 };
 
-#endif //_DYN_SUBSCRIPTION_HPP__
+
+} // dynrclcpp
+
+#endif //_DYN_SUBSCRIPTION_BASE_HPP__

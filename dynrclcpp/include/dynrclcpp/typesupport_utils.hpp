@@ -25,15 +25,17 @@
 
 extern "C"
 {
-// Get the type name of an existing topic.
+// Get the type of an existing topic as a string.
 // The topic must be being published or subscribed to by at least one node. If it is not, then the
 // topic will not exist and so no type information will be retrievable.
 // Additionally, the topic must have been discovered by this node. This may require waiting some
 // time after starting calling rcl_init() for dynamic discovery to discover the topic.
-InterfaceTypeName get_topic_type(const rcl_node_t * node, const std::string & topic);
+std::string get_topic_type_string(const rcl_node_t * node, const std::string & topic);
+
+
 // Split a type specified as a string into the namespace and type name.
 // The string must be in the format "[namespace]/msg/[type]", for example "example_interfaces/msg/Int32".
-InterfaceTypeName get_topic_type_from_string_type(const std::string & type);
+InterfaceTypeName get_interface_type_name_from_type(const std::string & type);
 
 // Search for and load the type support library for a single interface type.
 // This function will search the system's configured library search paths (which should include the
@@ -44,6 +46,8 @@ InterfaceTypeName get_topic_type_from_string_type(const std::string & type);
 // function, when called, provides a pointer to the type support structure for the specified
 // interface type. This pointer is returned. It can be passed to functions such as
 // rcl_subscription_init().
-const TypeSupport * get_type_support(const InterfaceTypeName & interface_type);
+const rosidl_message_type_support_t * get_msg_type_support(const std::string& type);
+
+const rosidl_service_type_support_t * get_srv_type_support(const std::string& type);
 }  // extern "C"
 #endif  // DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_

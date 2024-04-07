@@ -74,6 +74,20 @@ void NODE::init(int argc, char** argv)
 // destroy the node and its entities
 void NODE::destroy_node()
 {
+  // clearup all the subscriptions
+  for (auto& sub : sub_registry){
+    sub.second->destroy();
+  }
+  // clear up all the publishers
+  for(auto& pub : pub_registry){
+    pub.second->destroy();
+  }
+  // stop all the timers
+  for(auto& tim : timer_registry){
+    if (tim.second != nullptr)
+      tim.second->stop();
+  }
+
   // clear up node
   if(rcl_node_options_fini(&node_options) != RCL_RET_OK)
     RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "node options fini failed: %s", rcl_get_error_string().str);
@@ -118,7 +132,7 @@ void NODE::set_debug_severity(RCUTILS_LOG_SEVERITY log_type){
 
 
 
-std::shared_ptr<DynSubscription> NODE::create_subscription(
+std::shared_ptr<Subscription> NODE::create_subscription(
 const std::string& topic_,
 const std::string& type_,
 rmw_qos_profile_t qos_,
@@ -137,8 +151,8 @@ std::function<void(RosMessage msg)> callback_)
 
     // create new subscription
     RCUTILS_LOG_INFO_NAMED(node_name.c_str(), "creating subscription: '%s' ", topic_.c_str());
-    std::shared_ptr<DynSubscription> sub 
-      = std::make_shared<DynSubscription>(topic_, type_, &node, qos_, callback_);
+    std::shared_ptr<Subscription> sub 
+      = std::make_shared<Subscription>(topic_, type_, &node, qos_, callback_);
     
     // insert created subscription into subs_registry
     sub_registry.insert({{topic_, type_}, sub});
@@ -155,7 +169,7 @@ std::function<void(RosMessage msg)> callback_)
 
 
 
-std::shared_ptr<DynSubscription> NODE::create_subscription(
+std::shared_ptr<Subscription> NODE::create_subscription(
 const std::string& topic_,
 rmw_qos_profile_t qos_,
 std::function<void(RosMessage msg)> callback_)
@@ -165,8 +179,8 @@ std::function<void(RosMessage msg)> callback_)
   std::this_thread::sleep_for(std::chrono::seconds(1));
   try{
 
-    auto interface_type_name = get_topic_type(&node, topic_);
-    std::string type = interface_type_name.first + "/msg/" + interface_type_name.second;
+    auto type = get_topic_type_string(&node, topic_);
+
     // check if the subscription is already available
     auto it = sub_registry.find({topic_, type});
     if(it != sub_registry.end()){
@@ -175,8 +189,8 @@ std::function<void(RosMessage msg)> callback_)
 
     // create new subscription
     RCUTILS_LOG_INFO_NAMED(node_name.c_str(), "creating subscription: '%s' ", topic_.c_str());
-    std::shared_ptr<DynSubscription> sub 
-      = std::make_shared<DynSubscription>(topic_, type, &node, qos_, callback_);
+    std::shared_ptr<Subscription> sub 
+      = std::make_shared<Subscription>(topic_, type, &node, qos_, callback_);
     
     // insert created subscription into subs_registry
     sub_registry.insert({{topic_, type}, sub});
@@ -218,13 +232,13 @@ void NODE::destroy_subscription(const std::string& topic_, const std::string& ty
 
 
 
-std::shared_ptr<DynPublisher> NODE::create_publisher(
+std::shared_ptr<Publisher> NODE::create_publisher(
 const std::string& topic_,
 const std::string& type_,
 rmw_qos_profile_t qos_)
 {
   try{
-    std::shared_ptr<DynPublisher> pub = std::make_shared<DynPublisher>(topic_, type_, &node, qos_);
+    std::shared_ptr<Publisher> pub = std::make_shared<Publisher>(topic_, type_, &node, qos_);
     pub_registry.insert({{topic_, type_}, pub});
     return pub;
   }
@@ -274,11 +288,7 @@ void NODE::destroy_timer(const std::string& key){
   }
 }
 
-void NODE::spin(){
-  while(!shutdown){
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
-}
+
 
 
 nlohmann::json NODE::get_nodes_info(){
@@ -297,6 +307,8 @@ nlohmann::json NODE::get_nodes_info(){
     nlohmann::json json_nodeGraph;
 
     for(size_t i = 0; i < node_names.size; i++){
+      if(std::string(node_names.data[i]) == "_ros2cli_daemon_0") continue; //  skip this
+
       std::string nodeName = "/"+ std::string(node_names.data[i]);
 
       nlohmann::json json_nodeInfo = get_node_info(nodeName);
@@ -404,6 +416,11 @@ std::string NODE::yamlToString(const YAML::Node& yaml){
 }
 
 
+void spin(){
+  while(true){
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+  }
+}
 
 } // namespace dynrclcpp
 
