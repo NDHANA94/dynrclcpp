@@ -23,6 +23,9 @@
 #include "dynrclcpp/timer_base.hpp"
 #include "rcl/rcl.h"
 
+#include "yaml-cpp/yaml.h"
+#include "yaml-cpp/emitter.h"
+
 
 namespace dynrclcpp{
 
@@ -47,7 +50,7 @@ public:
 
     /// @brief Publish the topic
     /// @param msg_yaml : yaml formated message to publish
-    void publish(std::string& msg_yaml);
+    void publish(const YAML::Node& msg_yaml);
 
     /// @brief To destroy the publisher
     void destroy();
@@ -59,6 +62,7 @@ private:
     rcl_publisher_options_t options;
     rcl_node_t* node;
     rmw_qos_profile_t qos;
+    RosMessage msg;
 };
 
 } //dynrclcpp

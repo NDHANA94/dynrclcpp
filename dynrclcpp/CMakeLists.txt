@@ -28,6 +28,7 @@ add_library(dynrclcpp STATIC
   src/timer_base.cpp
   src/publisher_base.cpp
   src/subscription_base.cpp
+  src/client_base.cpp
   src/typesupport_utils.cpp
 )
 

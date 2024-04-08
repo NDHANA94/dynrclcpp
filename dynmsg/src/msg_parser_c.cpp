@@ -486,15 +486,15 @@ void yaml_to_rosmsg_impl(
 
 RosMessage yaml_and_typeinfo_to_rosmsg(
   const TypeInfo * type_info,
-  const std::string & yaml_str,
+  const YAML::Node& yaml_msg,
   rcutils_allocator_t * allocator)
 {
   rcutils_allocator_t default_allocator = rcutils_get_default_allocator();
   if (!allocator) {
     allocator = &default_allocator;
   }
-  // Parse the YAML representation to an in-memory representation
-  YAML::Node root = YAML::Load(yaml_str);
+  // // Parse the YAML representation to an in-memory representation
+  // YAML::Node root = YAML::Load(yaml_str);
   RosMessage ros_msg;
   // Load the introspection information and allocate space for the ROS message's binary
   // representation
@@ -502,20 +502,54 @@ RosMessage yaml_and_typeinfo_to_rosmsg(
     return {nullptr, nullptr};
   }
   // Convert the YAML representation to a binary representation
-  impl::yaml_to_rosmsg_impl(root, ros_msg.type_info, ros_msg.data);
+  impl::yaml_to_rosmsg_impl(yaml_msg, ros_msg.type_info, ros_msg.data);
   return ros_msg;
 }
 
 RosMessage yaml_to_rosmsg(
   const InterfaceTypeName & interface_type,
-  const std::string & yaml_str)
+  const YAML::Node& yaml_msg)
 {
-  const auto * type_info = dynmsg::c::get_type_info(interface_type);
+  const auto * type_info = dynmsg::c::get_msg_type_info(interface_type);
   if (nullptr == type_info) {
     return {nullptr, nullptr};
   }
-  return dynmsg::c::yaml_and_typeinfo_to_rosmsg(type_info, yaml_str, nullptr);
+  return dynmsg::c::yaml_and_typeinfo_to_rosmsg(type_info, yaml_msg, nullptr);
 }
+
+
+RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req){
+  const auto* type_info = dynmsg::c::get_srv_type_info(interface_type);
+  if(nullptr == type_info){
+    return {nullptr, nullptr};
+  }
+  
+  RosSrvRequest ros_req;
+  if(DYNMSG_RET_OK != dynmsg::c::ros_srv_request_init(interface_type, &ros_req)){
+    return {nullptr, nullptr};
+  }
+
+  impl::yaml_to_rosmsg_impl(yaml_req, ros_req.type_info->request_members_, ros_req.data);
+  return ros_req;
+}
+
+
+RosSrvRequest yaml_to_response(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res){
+  const auto* type_info = dynmsg::c::get_srv_type_info(interface_type);
+  if(nullptr == type_info){
+    return {nullptr, nullptr};
+  }
+  
+  RosSrvRequest ros_res;
+  if(DYNMSG_RET_OK != dynmsg::c::ros_srv_response_init(interface_type, &ros_res)){
+    return {nullptr, nullptr};
+  }
+
+  impl::yaml_to_rosmsg_impl(yaml_res, ros_res.type_info->response_members_ , ros_res.data);
+  return ros_res;
+}
+
+
 
 }  // namespace c
 }  // namespace dynmsg

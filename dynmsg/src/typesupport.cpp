@@ -30,7 +30,7 @@ namespace dynmsg
 namespace c
 {
 
-const TypeInfo * get_type_info(const InterfaceTypeName & interface_type)
+const TypeInfo * get_msg_type_info(const InterfaceTypeName & interface_type)
 {
   // Load the introspection library for the package containing the requested type
   std::stringstream ts_lib_name;
@@ -79,6 +79,55 @@ const TypeInfo * get_type_info(const InterfaceTypeName & interface_type)
   return type_info;
 }
 
+
+const SrvTypeInfo* get_srv_type_info(const InterfaceTypeName& interface_type){
+  // Load the introspection library for the package containing the requested type
+  std::stringstream ts_lib_name;
+  ts_lib_name << "lib" << interface_type.first << "__rosidl_typesupport_introspection_c.so";
+  RCUTILS_LOG_DEBUG_NAMED(
+    "dynmsg",
+    "Loading introspection type support library %s",
+    ts_lib_name.str().c_str());
+  void * introspection_type_support_lib = dlopen(ts_lib_name.str().c_str(), RTLD_LAZY);
+  if (introspection_type_support_lib == nullptr) {
+    RCUTILS_LOG_ERROR_NAMED(
+      "dynmsg", "failed to load introspection type support library: %s", dlerror());
+    return nullptr;
+  }
+  // Load the function that, when called, will give us the introspection information for the
+  // interface type we are interested in
+  std::stringstream ts_func_name;
+  ts_func_name << "rosidl_typesupport_introspection_c__get_service_type_support_handle__" <<
+    interface_type.first << "__srv__" << interface_type.second;
+  RCUTILS_LOG_DEBUG_NAMED(
+    "dynmsg", "Loading type support function %s", ts_func_name.str().c_str());
+
+  get_message_ts_func introspection_type_support_handle_func =
+    reinterpret_cast<get_message_ts_func>(dlsym(
+      introspection_type_support_lib,
+      ts_func_name.str().c_str()));
+  if (introspection_type_support_handle_func == nullptr) {
+    RCUTILS_LOG_ERROR_NAMED(
+      "dynmsg",
+      "failed to load introspection type support function: %s",
+      dlerror());
+    return nullptr;
+  }
+
+  // Call the function to get the introspection information we want
+  const rosidl_message_type_support_t * introspection_ts =
+    introspection_type_support_handle_func();
+  RCUTILS_LOG_DEBUG_NAMED(
+    "dynmsg",
+    "Loaded type support %s",
+    introspection_ts->typesupport_identifier);
+  const rosidl_typesupport_introspection_c__ServiceMembers * type_info =
+    reinterpret_cast<const rosidl_typesupport_introspection_c__ServiceMembers *>(
+    introspection_ts->data);
+
+  return type_info;
+}
+
 dynmsg_ret_t ros_message_with_typeinfo_init(
   const TypeInfo * type_info,
   RosMessage * ros_msg,
@@ -108,7 +157,7 @@ dynmsg_ret_t ros_message_init(
   const InterfaceTypeName & interface_type,
   RosMessage * ros_msg)
 {
-  const auto * type_info = get_type_info(interface_type);
+  const auto * type_info = get_msg_type_info(interface_type);
   if (nullptr == type_info) {
     return DYNMSG_RET_ERROR;
   }
@@ -126,6 +175,62 @@ void ros_message_destroy(RosMessage * ros_msg)
   ros_msg->type_info->fini_function(ros_msg->data);
   delete[] ros_msg->data;
 }
+
+
+dynmsg_ret_t ros_srv_request_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_req)
+{
+  const auto* type_info = get_srv_type_info(interface_type);
+  if(nullptr == type_info){
+    return DYNMSG_RET_ERROR;
+  }
+
+  rcutils_allocator_t allocator = rcutils_get_default_allocator();
+  RCUTILS_LOG_DEBUG_NAMED("dynmsg", "Allocating message buffer of size %ld bytes", type_info->request_members_->size_of_);
+
+  // Allocate space to store the binary representation of the message
+  uint8_t * data =
+    static_cast<uint8_t *>(allocator.allocate(type_info->request_members_->size_of_, allocator.state));
+  if (nullptr == data) {
+    return DYNMSG_RET_ERROR;
+  }
+  // Initialise the message buffer according to the interface type
+  type_info->request_members_->init_function(data, ROSIDL_RUNTIME_C_MSG_INIT_ALL);
+  *ros_req = RosSrvRequest{type_info, data};
+  return DYNMSG_RET_OK;
+}
+
+void ros_srv_request_destroy(RosSrvRequest * ros_req){
+  ros_req->type_info->request_members_->fini_function(ros_req->data);
+  delete[] ros_req->data;
+}
+
+dynmsg_ret_t ros_srv_response_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_res)
+{
+  const auto* type_info = get_srv_type_info(interface_type);
+  if(nullptr == type_info){
+    return DYNMSG_RET_ERROR;
+  }
+
+  rcutils_allocator_t allocator = rcutils_get_default_allocator();
+  RCUTILS_LOG_DEBUG_NAMED("dynmsg", "Allocating message buffer of size %ld bytes", type_info->response_members_->size_of_);
+
+  // Allocate space to store the binary representation of the message
+  uint8_t * data =
+    static_cast<uint8_t *>(allocator.allocate(type_info->response_members_->size_of_, allocator.state));
+  if (nullptr == data) {
+    return DYNMSG_RET_ERROR;
+  }
+  // Initialise the message buffer according to the interface type
+  type_info->response_members_->init_function(data, ROSIDL_RUNTIME_C_MSG_INIT_ALL);
+  *ros_res = RosSrvResponse{type_info, data};
+  return DYNMSG_RET_OK;
+}
+
+void ros_srv_response_destroy(RosSrvRequest * ros_res){
+  ros_res->type_info->response_members_->fini_function(ros_res->data);
+  delete[] ros_res->data;
+}
+
 
 }  // namespace c
 

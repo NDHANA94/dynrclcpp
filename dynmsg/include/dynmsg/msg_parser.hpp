@@ -37,7 +37,7 @@ namespace c
  * It is not an error for a field of the ROS message to not be specified in the YAML
  * representation; that field will be left uninitialised.
  */
-RosMessage yaml_to_rosmsg(const InterfaceTypeName & interface_type, const std::string & yaml_str);
+RosMessage yaml_to_rosmsg(const InterfaceTypeName & interface_type, const YAML::Node& yaml_msg);
 
 /// Version of yaml_to_rosmsg() with TypeInfo provided directly, and an allocator.
 /**
@@ -45,8 +45,32 @@ RosMessage yaml_to_rosmsg(const InterfaceTypeName & interface_type, const std::s
  */
 RosMessage yaml_and_typeinfo_to_rosmsg(
   const TypeInfo * type_info,
-  const std::string & yaml_str,
+  const YAML::Node& yaml_msg,
   rcutils_allocator_t * allocator);
+
+/// Parse a YAML representation of a request into a ROS service request and store it in a raw bytes buffer.
+/**
+ * The introspection information is used to convert the YAML representation into the correct binary
+ * representation for the given ROS request.
+ *
+ * It is an error for the YAML representation to contain a field that is not in the ROS request.
+ * It is not an error for a field of the ROS request to not be specified in the YAML
+ * representation; that field will be left uninitialised.
+ */
+RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req);  //
+
+/// Parse a YAML representation of a response into a ROS service response and store it in a raw bytes buffer.
+/**
+ * The introspection information is used to convert the YAML representation into the correct binary
+ * representation for the given ROS response.
+ *
+ * It is an error for the YAML representation to contain a field that is not in the ROS response.
+ * It is not an error for a field of the ROS response to not be specified in the YAML
+ * representation; that field will be left uninitialised.
+ */
+RosSrvRequest yaml_to_response(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res); //
+
+
 
 }  // namespace c
 
@@ -59,7 +83,7 @@ namespace cpp
  */
 RosMessage_Cpp yaml_to_rosmsg(
   const InterfaceTypeName & interface_type,
-  const std::string & yaml_str);
+  const YAML::Node yaml_str);
 
 /// C++ version of dynmsg::c::yaml_and_typeinfo_to_rosmsg().
 /**

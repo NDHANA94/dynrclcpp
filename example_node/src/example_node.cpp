@@ -29,28 +29,42 @@ public:
     node = std::make_shared<dynrclcpp::NODE>(name);
     node->set_debug_severity(RCUTILS_LOG_SEVERITY_DEBUG);
     node->init(argc, argv);
+
+
     
-    /// TEST SUBSCRIPTIONS
-    auto callback_ = std::bind(&ExampleNode::sub_callback, this, std::placeholders::_1);
+    /// TEST SUBSCRIPTIONS -----------------------------------------------------------------------------------------
+    // auto callback_ = std::bind(&ExampleNode::sub_callback, this, std::placeholders::_1);
     // auto sub1 = node->create_subscription("/joy", "sensor_msgs/msg/Joy", rmw_qos_profile_default, callback_);
-    auto sub2 = node->create_subscription("/chatter", "std_msgs/msg/String", rmw_qos_profile_default, callback_);
+    // auto sub2 = node->create_subscription("/chatter", "std_msgs/msg/String", rmw_qos_profile_default, callback_);
     // auto sub3 = node->create_subscription("/chatter", rmw_qos_profile_default, callback_);
-   
+    
     // if(sub1 != nullptr) sub1->subscribe();
-    if(sub2 != nullptr) sub2->subscribe();
+    // if(sub2 != nullptr) sub2->subscribe();
     // if(sub3 != nullptr) sub3->subscribe();
+
+
    
-    /// TEST TIMER WITH A PUBLISHER
-    pub1 = node->create_publisher("test_pub1", "std_msgs/msg/Int32", QOS_DEFAULT);
+    /// TEST TIMER WITH A PUBLISHER ---------------------------------------------------------------------------------
+    pub1 = node->create_publisher("test_pub1", "std_msgs/msg/Int32MultiArray", QOS_DEFAULT);
 
     if(pub1 != nullptr) pub1->timer = node->create_timer("pub1_tim", std::bind(&ExampleNode::timer_callback, this), std::chrono::seconds(1));
 
+    // TEST CLIENT -------------------------------------------------------------------------------------------------
+    client = node->create_client("add_two_ints", "example_interfaces/srv/AddTwoInts", rmw_qos_profile_services_default, 
+                  std::bind(&ExampleNode::client_callback, this, std::placeholders::_1));
 
-    /// TEST DESTROY
+    YAML::Node req;
+    req["a"] = int64_t(10);
+    req["b"] = int64_t(10);
+    client->response_timeout = std::chrono::milliseconds(10000); // try 10 sec to get response for the request
+    client->ignore_timeout_ = true;
+    client->send_request(req);
+
+    /// TEST DESTROY -----------------------------------------------------------------------------------------------
     std::this_thread::sleep_for(std::chrono::seconds(3));
     // node->destroy_subscription("/chatter", "std_msgs/msg/String");
-    // node->destroy_publisher("test_pub1", "std_msgs/msg/Int32"); // Timer will be automatically destroyed
-
+    node->destroy_publisher("test_pub1", "std_msgs/msg/Int32"); // Timer will be automatically destroyed
+    node->destroy_client("add_two_ints");
     /// TEST NODES INFO
     nlohmann::json nodesInfo = node->get_nodes_info();
     std::string nodesInfo_str = nodesInfo.dump();
@@ -64,8 +78,10 @@ public:
   }
 
   void timer_callback(){
-    std::string msg1 = "data: 10";
-    pub1->publish(msg1);
+    YAML::Node msg;
+    std::vector<int> dataArray = {1,2,3,4,5};
+    msg["data"] = dataArray; 
+    pub1->publish(msg);
   }
 
   void sub_callback(RosMessage msg){
@@ -73,8 +89,14 @@ public:
     
   }
 
+  void client_callback(RosSrvResponse msg){
+    std::cout << "client recieved response" << "\n";
+    
+  }
+
   std::shared_ptr<dynrclcpp::NODE> node;
   std::shared_ptr<dynrclcpp::Publisher> pub1;
+  std::shared_ptr<dynrclcpp::Client> client;
 
 
 

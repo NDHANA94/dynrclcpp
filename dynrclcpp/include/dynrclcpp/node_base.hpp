@@ -28,6 +28,7 @@
 #include "dynrclcpp/subscription_base.hpp"
 #include "dynrclcpp/publisher_base.hpp"
 #include "dynrclcpp/timer_base.hpp"
+#include "dynrclcpp/client_base.hpp"
 
 #include "dynrclcpp/typesupport_utils.hpp"
 
@@ -163,6 +164,16 @@ public:
     void destroy_timer(const std::string& key);
 
 
+
+    std::shared_ptr<Client> create_client(
+        const std::string& name, 
+        const std::string& type,
+        rmw_qos_profile_t qos,
+        std::function<void(RosSrvResponse res)> callback);
+    
+    void destroy_client(const std::string& name);
+
+
     /// @brief to get the ROS graph as a json object
     /// @return nlohmann::json object
     nlohmann::json get_nodes_info();
@@ -192,11 +203,11 @@ private:
     bool shutdown{false};
    
     //    map< pair< topic, type >, Subscription >
-    std::map<std::pair<std::string, std::string>, std::shared_ptr<Subscription>> sub_registry;
+    std::map<std::string, std::shared_ptr<Subscription>> sub_registry;
     //    map< pair< topic, type >, Publisher >
-    std::map<std::pair<std::string, std::string>, std::shared_ptr<Publisher>> pub_registry;
+    std::map<std::string, std::shared_ptr<Publisher>> pub_registry;
     //   map<client name, Client>
-    
+    std::map<std::string, std::shared_ptr<Client>> client_registry;
     //  map<key, Timer>
     std::map<std::string, std::shared_ptr<Timer>> timer_registry;
 

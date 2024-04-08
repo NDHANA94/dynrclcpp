@@ -48,14 +48,13 @@ topic(topic_),  type(type_), node(node_), qos(qos_)
     RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "successfully initialized");
 }
 
-void Publisher::publish(std::string& msg_yaml){
-  RosMessage msg = dynmsg::c::yaml_to_rosmsg(this->interface_type_name, msg_yaml);
+void Publisher::publish(const YAML::Node& msg_yaml){
+  msg = dynmsg::c::yaml_to_rosmsg(this->interface_type_name, msg_yaml);
   auto ret = rcl_publish(&pub, msg.data, nullptr);
   if(ret!=RCL_RET_OK){
     std::string err = "failed to publish topic '" + this->topic + "'. " + std::string(rcl_get_error_string().str);
     throw std::runtime_error(err);
   }
-  RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "published: %s", msg_yaml.c_str());
 }
 
 void Publisher::destroy(){
@@ -66,6 +65,7 @@ void Publisher::destroy(){
     std::string err = "failed to finalize publisher for topic '" + topic + "'. " + std::string(rcl_get_error_string().str);
     throw std::runtime_error(err);
   }
+  dynmsg::c::ros_message_destroy(&msg); // ?
   RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "successfully destroyed");
 }
 

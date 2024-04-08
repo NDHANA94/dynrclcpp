@@ -148,8 +148,8 @@ const rosidl_service_type_support_t * get_srv_type_support(const std::string& ty
   // Load the function that, when called, will give us the type support for the interface type we
   // are interested in
   std::string ts_func_name;
-  ts_func_name = "rosidl_typesupport_c__get_message_type_support_handle__" + pkg_name +
-    "__msg__" + type_name;
+  ts_func_name = "rosidl_typesupport_c__get_service_type_support_handle__" + pkg_name +
+    "__srv__" + type_name;
   RCUTILS_LOG_DEBUG_NAMED("typesupport_utils", "Loading type support function %s", ts_func_name.c_str());
 
   get_service_ts_func type_support_handle_func =

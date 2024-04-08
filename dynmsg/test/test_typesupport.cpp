@@ -18,9 +18,9 @@
 
 TEST(TestTypesupport, c)
 {
-  const TypeInfo * info = dynmsg::c::get_type_info({"std_msgs", "String"});
+  const TypeInfo * info = dynmsg::c::get_msg_type_info({"std_msgs", "String"});
   EXPECT_NE(nullptr, info);
-  const TypeInfo * info_bad = dynmsg::c::get_type_info({"super_msgs", "SuperRealMsg"});
+  const TypeInfo * info_bad = dynmsg::c::get_msg_type_info({"super_msgs", "SuperRealMsg"});
   EXPECT_EQ(nullptr, info_bad);
 }
 
