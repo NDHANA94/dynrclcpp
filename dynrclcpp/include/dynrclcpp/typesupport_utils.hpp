@@ -23,6 +23,9 @@
 #include "rcl/node.h"
 #include "rcl/types.h"
 
+#include <yaml-cpp/yaml.h>
+#include <iostream>
+
 extern "C"
 {
 // Get the type of an existing topic as a string.
@@ -49,5 +52,11 @@ InterfaceTypeName get_interface_type_name_from_type(const std::string & type);
 const rosidl_message_type_support_t * get_msg_type_support(const std::string& type);
 
 const rosidl_service_type_support_t * get_srv_type_support(const std::string& type);
+
+
+// Convert a YAML::Node value to a string
+const std::string yaml_to_string(YAML::Node node);
+
+
 }  // extern "C"
 #endif  // DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_

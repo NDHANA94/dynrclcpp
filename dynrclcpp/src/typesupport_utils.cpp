@@ -23,6 +23,8 @@
 #include "rcl/graph.h"
 #include "rcutils/logging_macros.h"
 
+
+
 std::string get_topic_type_string(const rcl_node_t * node, const std::string & topic)
 {
   auto pubs = rcl_get_zero_initialized_topic_endpoint_info_array();
@@ -165,4 +167,37 @@ const rosidl_service_type_support_t * get_srv_type_support(const std::string& ty
   RCUTILS_LOG_DEBUG_NAMED("typesupport_utils", "Loaded type support %s", ts->typesupport_identifier);
 
   return ts;
+}
+
+const std::string yaml_to_string(YAML::Node node){
+  std::string str;
+
+  YAML::Emitter emitter;
+  emitter << node["data"];
+  str = emitter.c_str();
+  return str;
+
+
+std::vector<int> yaml_to_int_vector(YAML::Node node){
+    std::vector<int> multi_arr;
+    for(const auto& item: node["data"]){
+        multi_arr.push_back(item.as<int>());
+    }
+    return multi_arr;
+}
+
+std::vector<float> yaml_to_float_vector(YAML::Node node){
+    std::vector<float> multi_arr;
+    for(const auto& item: node["data"]){
+        multi_arr.push_back(item.as<float>());
+    }
+    return multi_arr;
+}
+
+std::vector<double> yaml_to_double_vector(YAML::Node node){
+    std::vector<double> multi_arr;
+    for(const auto& item: node["data"]){
+        multi_arr.push_back(item.as<double>());
+    }
+    return multi_arr;
 }

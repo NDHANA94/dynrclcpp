@@ -22,6 +22,8 @@
 #include <atomic>
 #include <functional>
 
+#include <yaml-cpp/yaml.h>
+
 #include <dynmsg/typesupport.hpp>
 
 #include "dynrclcpp/typesupport_utils.hpp"
@@ -49,7 +51,7 @@ public:
     const std::string& type_,
     rcl_node_t* node_,
     rmw_qos_profile_t qos_,
-    std::function<void(RosMessage msg)> callback_);
+    std::function<void(YAML::Node msg)> callback_);
 
     
 
@@ -73,7 +75,7 @@ private:
     rcl_subscription_options_t options;
     RosMessage msg;
     rmw_qos_profile_t qos;
-    std::function<void(RosMessage msg)> callback;
+    std::function<void(YAML::Node msg)> callback;
     size_t count_pubs{0};
     bool is_initialized{false};
     std::atomic<bool> stopFlag{false}; // atomic boolean to control subscription loop
@@ -87,7 +89,7 @@ private:
     /// @brief To read the topic and invoke the callback function.
     /// \note Run `count_publishers()` function before running this function!!!
     /// @param callback_ 
-    void read_msg(std::function<void(RosMessage msg)> callback_);
+    void read_msg(std::function<void(YAML::Node msg)> callback_);
     
 };
 

@@ -136,7 +136,7 @@ std::shared_ptr<Subscription> NODE::create_subscription(
 const std::string& topic_,
 const std::string& type_,
 rmw_qos_profile_t qos_,
-std::function<void(RosMessage msg)> callback_)
+std::function<void(const YAML::Node msg)> callback_)
 {
   
   // need to sleep for a bit for discovery to populate the ROS graph information 
@@ -172,7 +172,7 @@ std::function<void(RosMessage msg)> callback_)
 std::shared_ptr<Subscription> NODE::create_subscription(
 const std::string& topic_,
 rmw_qos_profile_t qos_,
-std::function<void(RosMessage msg)> callback_)
+std::function<void(const YAML::Node msg)> callback_)
 {
   
   // need to sleep for a bit for discovery to populate the ROS graph information 

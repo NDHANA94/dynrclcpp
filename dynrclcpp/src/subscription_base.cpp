@@ -33,7 +33,7 @@ const std::string& topic_,
 const std::string& type_,
 rcl_node_t* node_,
 rmw_qos_profile_t qos_,
-std::function<void(RosMessage msg)> callback_
+std::function<void(YAML::Node msg)> callback_
 )
 {
     topic = topic_; 
@@ -114,7 +114,7 @@ void Subscription::count_publishers(){
 
 
 
-void Subscription::read_msg(std::function<void(RosMessage msg)> callback_){
+void Subscription::read_msg(std::function<void(YAML::Node msg)> callback_){
     // rmw_take (read msg)
     bool taken = false;
     while (!stopFlag && count_pubs>0){ //.load(std::memory_order_acquire)){
@@ -126,7 +126,8 @@ void Subscription::read_msg(std::function<void(RosMessage msg)> callback_){
         }
         if(taken){
             // invoke callback function
-            callback_(msg);
+            YAML::Node msg_yaml = dynmsg::c::message_to_yaml(msg);
+            callback_(msg_yaml);
         }
     }
 
@@ -144,7 +145,11 @@ void Subscription::read_msg(std::function<void(RosMessage msg)> callback_){
 
 
 void Subscription::destroy(){
-    stopFlag = true;
+    if(is_initialized){
+        RCUTILS_LOG_INFO_NAMED(topic.c_str(), "Requested to destroy the subscription");
+        stopFlag = true;
+    }
+    
 }
 
 } //dynrclcpp

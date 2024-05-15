@@ -92,7 +92,7 @@ public:
         const std::string& topic_,
         const std::string& type_,
         rmw_qos_profile_t qos_,
-        std::function<void(RosMessage msg)> callback_);
+        std::function<void(const YAML::Node msg)> callback_);
 
     /// @brief To create a new generic subscription without passing type and return shared_ptr of created subscription object.
     /// @param topic_ : topic name as a string
@@ -103,7 +103,7 @@ public:
     std::shared_ptr<Subscription> create_subscription(
         const std::string& topic_,
         rmw_qos_profile_t qos_,
-        std::function<void(RosMessage msg)> callback_);
+        std::function<void(const YAML::Node msg)> callback_);
 
 
     /// @brief Destroy a created subscription
