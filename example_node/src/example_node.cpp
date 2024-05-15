@@ -33,10 +33,10 @@ public:
 
     
     /// TEST SUBSCRIPTIONS -----------------------------------------------------------------------------------------
-    // auto callback_ = std::bind(&ExampleNode::sub_callback, this, std::placeholders::_1);
-    // auto sub1 = node->create_subscription("/joy", "sensor_msgs/msg/Joy", rmw_qos_profile_default, callback_);
+    auto callback_ = std::bind(&ExampleNode::sub_callback, this, std::placeholders::_1);
+    auto sub1 = node->create_subscription("/joy", "sensor_msgs/msg/Joy", rmw_qos_profile_default, callback_);
     // auto sub2 = node->create_subscription("/chatter", "std_msgs/msg/String", rmw_qos_profile_default, callback_);
-    // auto sub3 = node->create_subscription("/chatter", rmw_qos_profile_default, callback_);
+    auto sub3 = node->create_subscription("/chatter", rmw_qos_profile_default, callback_);
     
     // if(sub1 != nullptr) sub1->subscribe();
     // if(sub2 != nullptr) sub2->subscribe();
@@ -84,8 +84,8 @@ public:
     pub1->publish(msg);
   }
 
-  void sub_callback(RosMessage msg){
-    std::cout << dynmsg::c::message_to_yaml(msg) << "\n";
+  void sub_callback(const YAML::Node msg){
+    std::cout << msg["data"] << "\n";
     
   }
 
