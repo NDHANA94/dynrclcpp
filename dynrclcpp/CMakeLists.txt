@@ -29,6 +29,7 @@ add_library(dynrclcpp STATIC
   src/publisher_base.cpp
   src/subscription_base.cpp
   src/client_base.cpp
+  src/service_base.cpp
   src/typesupport_utils.cpp
 )
 

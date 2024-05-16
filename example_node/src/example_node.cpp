@@ -89,7 +89,8 @@ public:
     
   }
 
-  void client_callback(RosSrvResponse msg){
+  void client_callback(const YAML::Node msg){
+    
     std::cout << "client recieved response" << "\n";
     
   }

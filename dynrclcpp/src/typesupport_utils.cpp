@@ -169,6 +169,8 @@ const rosidl_service_type_support_t * get_srv_type_support(const std::string& ty
   return ts;
 }
 
+
+
 const std::string yaml_to_string(YAML::Node node){
   std::string str;
 
@@ -176,7 +178,7 @@ const std::string yaml_to_string(YAML::Node node){
   emitter << node["data"];
   str = emitter.c_str();
   return str;
-
+}
 
 std::vector<int> yaml_to_int_vector(YAML::Node node){
     std::vector<int> multi_arr;

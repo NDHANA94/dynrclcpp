@@ -161,7 +161,7 @@ std::function<void(const YAML::Node msg)> callback_)
   } 
   
   catch(const std::runtime_error & e){
-    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Error while creating subscription '%s': %s", topic_.c_str(),  e.what());
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Failed to create subscription '%s': %s", topic_.c_str(),  e.what());
     return nullptr;
   }
   
@@ -198,7 +198,7 @@ std::function<void(const YAML::Node msg)> callback_)
   } 
   
   catch(const std::runtime_error & e){
-    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Error while creating subscription '%s': %s", topic_.c_str(),  e.what());
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Falied to create subscription '%s': %s", topic_.c_str(),  e.what());
     return nullptr;
   }
   
@@ -242,7 +242,7 @@ rmw_qos_profile_t qos_)
     return pub;
   }
   catch(const std::runtime_error & e){
-    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Error while creating publisher '%s': %s", topic_.c_str(),  e.what());
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Failed to create publisher '%s': %s", topic_.c_str(),  e.what());
     return nullptr;
   }
   
@@ -283,7 +283,7 @@ void NODE::destroy_timer(const std::string& key){
     
   } 
   catch(const std::runtime_error & e){
-    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Error while destroying timer '%s':",   e.what());
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Failed to destroy timer '%s':",   e.what());
   }
 }
 
@@ -292,7 +292,7 @@ std::shared_ptr<Client>  NODE::create_client(
 const std::string& name, 
 const std::string& type,
 rmw_qos_profile_t qos,
-std::function<void(RosSrvResponse res)> callback)
+std::function<void(const YAML::Node res)> callback)
 {
   try{
     std::shared_ptr<Client> client = std::make_shared<Client>(&node, name, type, qos, callback);
@@ -300,7 +300,7 @@ std::function<void(RosSrvResponse res)> callback)
     return client;
   }
   catch(const std::runtime_error & e){
-    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Error while creating client  '%s': %s", name.c_str(), e.what());
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Failed to create client  '%s': %s", name.c_str(), e.what());
     return nullptr;
   }
 
@@ -319,7 +319,40 @@ void NODE::destroy_client(const std::string& name){
   }
 }
 
+std::shared_ptr<Service> NODE::create_service(
+const std::string& name, 
+const std::string& type,
+rmw_qos_profile_t qos,
+std::function<void(const YAML::Node req, YAML::Node& res)> callback)
+{
+  try{
+    std::shared_ptr<Service> service = std::make_shared<Service>(&node, name, type, qos, callback);
+    service_registry.insert({name, service});
+    return service;
+  } catch(const std::runtime_error & e){
+    RCUTILS_LOG_ERROR_NAMED(node_name.c_str(), "Failed to create service  '%s': %s", name.c_str(), e.what());
+    return nullptr;
+  } 
+}
 
+
+void NODE::destroy_service(const std::string& name){
+  auto it = service_registry.find(name);
+  if(it != service_registry.end()){
+    RCUTILS_LOG_INFO_NAMED(node_name.c_str(), "Destroying client '%s'", name.c_str());
+    it->second->destroy();
+    service_registry.erase(name);
+  }
+  else{
+    RCUTILS_LOG_INFO_NAMED(node_name.c_str(), "Failed to find '%s' client to destroy", name.c_str());
+  }
+}
+
+
+
+
+
+// ==============================================
 
 nlohmann::json NODE::get_nodes_info(){
   try{

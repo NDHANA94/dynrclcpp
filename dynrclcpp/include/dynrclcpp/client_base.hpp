@@ -23,15 +23,15 @@ public:
     const std::string& name, 
     const std::string& type, 
     rmw_qos_profile_t qos,
-    std::function<void(RosSrvResponse msg)> callback);
+    std::function<void(const YAML::Node& request)> callback);
 
     /// @brief sending a request and taking the response asynchronously.
     /// This will send repeatedly request until response is taken or timeout. 
-    /// If the response is not taken within `response_timeout` time period, this function will be terminated.
+    /// If the response is not taken within `response_timeout = 5 sec.` time period, this function will be terminated.
     /// you can change the `response_timeout` as you need before calling this function.
     /// If you want to ignore timeout, u can set `ignore_timeout_ = true`.
     /// @param yaml_req request as an instance of YAML::Node 
-    void send_request(const YAML::Node& yaml_req);
+    void send_request(const YAML::Node& request);
 
     void destroy();
     
@@ -39,6 +39,7 @@ public:
     bool ignore_timeout_{false};
 
 private:
+    bool is_initialized{false};
     std::atomic<bool> stopFlag{false};
 
     
@@ -48,7 +49,8 @@ private:
     std::string type_str_;
     rmw_qos_profile_t qos_;
     const rosidl_service_type_support_t* type_support_;
-    std::function<void(RosSrvResponse msg)> callback_;
+    std::function<void(const YAML::Node& request)> callback_;
+    
     
     int64_t sequence_number_;
     InterfaceTypeName interface_type_;

@@ -598,5 +598,44 @@ message_to_yaml(const RosMessage & message)
   return yaml_msg;
 }
 
+
+// added by nipun.dhananjaya@gmail.com
+YAML::Node
+srv_response_to_yaml(const RosSrvResponse & response)
+{
+  YAML::Node yaml_msg;
+  // Iterate over the members of the message, converting the binary data for each into a node in
+  // the YAML representation
+  for (uint32_t ii = 0; ii < response.type_info->member_count_; ++ii) {
+    // Get the introspection information for this particular member
+    const MemberInfo & member_info = response.type_info->members_[ii];
+    // Get a pointer to the member's data in the binary buffer
+    uint8_t * member_data = &response.data[member_info.offset_];
+    // Recursively (because some members may be non-primitive types themeslves) convert the member
+    // to YAML
+    yaml_msg[member_info.name_] = dynmsg::c::impl::member_to_yaml(member_info, member_data);
+  }
+  return yaml_msg;
+}
+
+// added by nipun.dhananjaya@gmail.com
+YAML::Node
+srv_request_to_yaml(const RosSrvRequest & request)
+{
+  YAML::Node yaml_msg;
+  // Iterate over the members of the message, converting the binary data for each into a node in
+  // the YAML representation
+  for (uint32_t ii = 0; ii < request.type_info->member_count_; ++ii) {
+    // Get the introspection information for this particular member
+    const MemberInfo & member_info = request.type_info->members_[ii];
+    // Get a pointer to the member's data in the binary buffer
+    uint8_t * member_data = &request.data[member_info.offset_];
+    // Recursively (because some members may be non-primitive types themeslves) convert the member
+    // to YAML
+    yaml_msg[member_info.name_] = dynmsg::c::impl::member_to_yaml(member_info, member_data);
+  }
+  return yaml_msg;
+}
+
 }  // namespace c
 }  // namespace dynmsg

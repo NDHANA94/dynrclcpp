@@ -41,6 +41,37 @@ namespace c
  */
 YAML::Node message_to_yaml(const RosMessage & message);
 
+
+/// Parse a ROS service response stored in a raw buffer into a YAML representation.
+/**
+ * The "response" argument contains both a pointer to the raw buffer and a pointer to the ROS type's
+ * introspection information as retrieved from an introspection type support library. (See the
+ * "get_type_info" function in typesupport_utils.hpp for loading introspection type support.)
+ *
+ * This function will use the provided introspection information to read the binary data out of the
+ * ROS service response-containing raw buffer and convert it into a YAML representation. The YAML
+ * representation is a tree structure, with each node in the tree being a field in the response.
+ * Each field is represented by two values: the ROS type of the field, in a textual representation,
+ * and the value. For an example of the YAML structure, run the CLI tool and echo a topic; the
+ * resulting YAML printed to the terminal is the structure used.
+ */
+YAML::Node srv_response_to_yaml(const RosSrvResponse & response);
+
+/// Parse a ROS service request stored in a raw buffer into a YAML representation.
+/**
+ * The "request" argument contains both a pointer to the raw buffer and a pointer to the ROS type's
+ * introspection information as retrieved from an introspection type support library. (See the
+ * "get_type_info" function in typesupport_utils.hpp for loading introspection type support.)
+ *
+ * This function will use the provided introspection information to read the binary data out of the
+ * ROS service response-containing raw buffer and convert it into a YAML representation. The YAML
+ * representation is a tree structure, with each node in the tree being a field in the request.
+ * Each field is represented by two values: the ROS type of the field, in a textual representation,
+ * and the value. For an example of the YAML structure, run the CLI tool and echo a topic; the
+ * resulting YAML printed to the terminal is the structure used.
+ */
+YAML::Node srv_request_to_yaml(const RosSrvRequest & request);
+
 }  // namespace c
 
 namespace cpp

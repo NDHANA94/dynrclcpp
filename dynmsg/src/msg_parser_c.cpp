@@ -529,7 +529,7 @@ RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAM
     return {nullptr, nullptr};
   }
 
-  impl::yaml_to_rosmsg_impl(yaml_req, ros_req.type_info->request_members_, ros_req.data);
+  impl::yaml_to_rosmsg_impl(yaml_req, ros_req.type_info, ros_req.data);
   return ros_req;
 }
 
@@ -545,7 +545,7 @@ RosSrvRequest yaml_to_response(const InterfaceTypeName& interface_type, const YA
     return {nullptr, nullptr};
   }
 
-  impl::yaml_to_rosmsg_impl(yaml_res, ros_res.type_info->response_members_ , ros_res.data);
+  impl::yaml_to_rosmsg_impl(yaml_res, ros_res.type_info , ros_res.data);
   return ros_res;
 }
 

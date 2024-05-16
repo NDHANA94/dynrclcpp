@@ -65,7 +65,7 @@ std::function<void(YAML::Node msg)> callback_
         std::string err = "subscription init for topic " + topic +  "failed: " + rcl_get_error_string().str;
         throw std::runtime_error(err);
     }
-    RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "subscription is successfully created");
+    RCUTILS_LOG_INFO_NAMED(topic.c_str(), "subscription is successfully created");
     is_initialized = true;
 
     

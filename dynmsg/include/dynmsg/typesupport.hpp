@@ -71,14 +71,14 @@ typedef const rosidl_message_type_support_t * (* get_message_ts_func)();
 //ROS request and response for services, stored in a binary buffer with attached introspection information
 typedef struct RosRequest_C
 {
-  const SrvTypeInfo_C * type_info;
+  const TypeInfo_C * type_info;
   uint8_t* data;
 } RosRequest_C;
 
 
 typedef struct RosRequest_Cpp
 {
-  const SrvTypeInfo_Cpp * type_info;
+  const TypeInfo_Cpp * type_info;
   uint8_t* data;
 } RosRequest_Cpp;
 

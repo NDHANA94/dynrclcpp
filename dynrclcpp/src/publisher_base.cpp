@@ -45,7 +45,7 @@ topic(topic_),  type(type_), node(node_), qos(qos_)
         std::string err = "failed to init publisher for topic '" + topic + "'. " + std::string(rcl_get_error_string().str);
         throw std::runtime_error(err.c_str());
     }
-    RCUTILS_LOG_DEBUG_NAMED(topic.c_str(), "successfully initialized");
+    RCUTILS_LOG_INFO_NAMED(topic.c_str(), "successfully initialized");
 }
 
 void Publisher::publish(const YAML::Node& msg_yaml){

@@ -29,6 +29,7 @@
 #include "dynrclcpp/publisher_base.hpp"
 #include "dynrclcpp/timer_base.hpp"
 #include "dynrclcpp/client_base.hpp"
+#include "dynrclcpp/service_base.hpp"
 
 #include "dynrclcpp/typesupport_utils.hpp"
 
@@ -164,14 +165,40 @@ public:
     void destroy_timer(const std::string& key);
 
 
-
+    /// @brief Create a ROS service client dynamically.
+    /// This is an asynchronous process.
+    /// @param name 
+    /// @param type 
+    /// @param qos 
+    /// @param callback 
+    /// @return 
     std::shared_ptr<Client> create_client(
         const std::string& name, 
         const std::string& type,
         rmw_qos_profile_t qos,
-        std::function<void(RosSrvResponse res)> callback);
+        std::function<void(const YAML::Node res)> callback);
     
+    /// @brief To destroy a service client dynamically.
+    /// @param name : name of the client to destroy
     void destroy_client(const std::string& name);
+
+
+    /// @brief To create a ROS service dynamically.
+    /// This is an asynchronous process.
+    /// @param name 
+    /// @param type 
+    /// @param qos 
+    /// @param callback 
+    /// @return 
+    std::shared_ptr<Service> create_service(
+        const std::string& name, 
+        const std::string& type,
+        rmw_qos_profile_t qos,
+        std::function<void(const YAML::Node req, YAML::Node& res)> callback);
+    
+    /// @brief To destroy a service dynamically.
+    /// @param name : name of the service to destroy
+    void destroy_service(const std::string& name);
 
 
     /// @brief to get the ROS graph as a json object
@@ -208,6 +235,8 @@ private:
     std::map<std::string, std::shared_ptr<Publisher>> pub_registry;
     //   map<client name, Client>
     std::map<std::string, std::shared_ptr<Client>> client_registry;
+    //   map<client name, Service>
+    std::map<std::string, std::shared_ptr<Service>> service_registry;
     //  map<key, Timer>
     std::map<std::string, std::shared_ptr<Timer>> timer_registry;
 

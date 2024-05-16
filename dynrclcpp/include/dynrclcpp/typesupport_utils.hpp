@@ -57,6 +57,14 @@ const rosidl_service_type_support_t * get_srv_type_support(const std::string& ty
 // Convert a YAML::Node value to a string
 const std::string yaml_to_string(YAML::Node node);
 
+// Convert a YAML::Node value to a vector of integers
+std::vector<int> yaml_to_int_vector(YAML::Node node);
+
+// Convert a YAML::Node value to a vector of floats
+std::vector<float> yaml_to_float_vector(YAML::Node node);
+
+// Convert a YAML::Node value to a vector of double
+std::vector<double> yaml_to_double_vector(YAML::Node node);
 
 }  // extern "C"
 #endif  // DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_

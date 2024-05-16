@@ -1,19 +1,19 @@
 #include <memory>
 #include "dynrclcpp/node_base.hpp"
 
-class IntSubscription{
+class MultiFloatSubscription{
 public:
-    IntSubscription(const std::string& name, int argc, char** argv){
+    MultiFloatSubscription(const std::string& name, int argc, char** argv){
         /// initialize the node
         node_ = std::make_shared<dynrclcpp::NODE>(name);
         node_->init(argc, argv);
 
         /// initialize the publisher
-        auto callback_func = std::bind(&IntSubscription::subscription_callback, this, std::placeholders::_1);
+        auto callback_func = std::bind(&MultiFloatSubscription::subscription_callback, this, std::placeholders::_1);
 
         /// initializing subscriber
         
-        subscriber_ = node_->create_subscription("/int_topic", QOS_DEFAULT, callback_func); // Option 1: Without explicitly passing the type of the topic
+        subscriber_ = node_->create_subscription("/multi_float_topic", QOS_DEFAULT, callback_func); // Option 1: Without explicitly passing the type of the topic
         // subscriber_ = node_->create_subscription("/chatter", "std_msgs/msg/Int32", QOS_DEFAULT, callback_func);    // Option 2: With the type of the topic
 
         // initiate subscription
@@ -28,8 +28,11 @@ public:
     }
 
     void subscription_callback(const YAML::Node msg){
-        int data = std::stoi(yaml_to_string(msg["data"]));
-        RCUTILS_LOG_INFO_NAMED(node_->node_name.c_str(), "received data: %i", data);
+        std::vector<float> data = yaml_to_float_vector(msg);
+        RCUTILS_LOG_INFO_NAMED(node_->node_name.c_str(), "received data:");
+        for(const auto& item : data){
+          std::cout << "- " << item << std::endl;
+        }
     }
 
 private:
@@ -40,7 +43,7 @@ private:
 
 int main(int argc, char** argv)
 {
-    IntSubscription node("string_publisher", argc, argv);
+    MultiFloatSubscription node("string_publisher", argc, argv);
     dynrclcpp::spin();
     return 0;
 }

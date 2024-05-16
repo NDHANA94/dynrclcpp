@@ -13,7 +13,7 @@ public:
 
         /// initializing subscriber
         
-        subscriber_ = node_->create_subscription("/multi_float_topic", QOS_DEFAULT, callback_func); // Option 1: Without explicitly passing the type of the topic
+        subscriber_ = node_->create_subscription("/int_topic", QOS_DEFAULT, callback_func); // Option 1: Without explicitly passing the type of the topic
         // subscriber_ = node_->create_subscription("/chatter", "std_msgs/msg/Int32", QOS_DEFAULT, callback_func);    // Option 2: With the type of the topic
 
         // initiate subscription
@@ -28,7 +28,7 @@ public:
     }
 
     void subscription_callback(const YAML::Node msg){
-        int data = std::stoi(yaml_to_string(msg["data"]));
+        int data = msg["data"].as<int32_t>();
         RCUTILS_LOG_INFO_NAMED(node_->node_name.c_str(), "received data: %i", data);
     }
 

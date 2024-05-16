@@ -29,8 +29,8 @@ public:
     }
 
     void subscription_callback(const YAML::Node msg){
-        
-        RCUTILS_LOG_INFO_NAMED(node_->node_name.c_str(), "received data: %s", yaml_to_string(msg["data"]).c_str());
+        std::string data = msg["data"].as<std::string>();
+        RCUTILS_LOG_INFO_NAMED(node_->node_name.c_str(), "received data: %s", data.c_str());
     }
 
 private:
