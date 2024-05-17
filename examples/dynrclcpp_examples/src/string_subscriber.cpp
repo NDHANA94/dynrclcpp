@@ -14,7 +14,7 @@ public:
 
         /// initializing subscriber
         /// Option 1: Without explicitly passing the type of the topic
-        // subscriber_ = node_->create_subscription("/chatter", QOS_DEFAULT, callback_func);
+        // subscriber_ = node_->create_subscription("/chatter", "std_msgs/msg/String" QOS_DEFAULT, callback_func);
         /// Option 2: With the type of the topic
         subscriber_ = node_->create_subscription("/chatter", QOS_DEFAULT, callback_func);
 
