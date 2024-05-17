@@ -12,9 +12,12 @@ This library empowers developers with the ability to dynamically create and dest
 - **`Efficiency`**: Optimize resource usage by creating and destroying communication entities as needed,
 
 </br>
-- foxy: OK
-- galactic: OK
-- humble: 
+
+- Foxy: OK 
+- Galactic: OK
+- Humble: OK
+- Iron: OK
+- Jezzy: NOT TESTED
 
 ## Instruction:
 
