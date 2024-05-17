@@ -1,7 +1,7 @@
 # dynrclcpp
 Dynamic ROS 2 client library
 
-This library allows developers to dynamically create and desstroy ROS2 entities such as *publishers, subscriptions, service clients* and *service servers*. 
+This library allows developers to dynamically create and destroy ROS2 entities such as *publishers, subscriptions, service clients* and *service servers*. 
 
 
 ### Features
