@@ -1,8 +1,14 @@
 # dynrclcpp
 Dynamic ROS 2 client library
 
-This library allows developers to dynamically create and destroy ROS2 entities such as *publishers, subscriptions, service clients* and *service servers*,
-by introducing dynamic message type handling. Unlike rclcpp, which requires message types to be known at compile-time, dynrclcpp allows developers to specify message types at runtime using string literals. This feature is particularly useful in scenarios where the message types cannot be predetermined or need to be changed based on runtime conditions.
+This library enables developers to dynamically create and desstroy ROS2 entities such as *publishers, subscriptions, service clients* and *service servers*, by introducing **dynamic message type handling.**
+
+Unlike `rclcpp`, which requires message types to be known at compile time, `dynrclcpp` allows developers to specify message types at runtime using string literals. This capability is particularly useful in scenarios where the message type cannot be predetermined or need to be adjusted based on runtime conditions. 
+
+The same library can be used with many ROS2 distributions (see [Tested Distro](#tested-distro)). 
+
+
+
 
 ### Features
 - **`Dynamic Creation`**: Programmatically generate publishers, subscriptions, service clients, and service servers on-the-fly.
