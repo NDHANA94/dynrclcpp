@@ -3,9 +3,10 @@
 <package format="3">
   <name>dynrclcpp_examples</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="nipun.dhananjaya@gmail.com">nipun</maintainer>
-  <license>TODO: License declaration</license>
+  <description>ROS 2 client dynamic library | examples </description>
+  <maintainer email="nipun.dhananjaya@gmail.com">W.M. Nipun Dhananjaya</maintainer>
+  <license>Apache 2.0</license>
+  <author email="nipun.dhananjaya@gmail.com">W.M. Nipun Dhananjaya</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

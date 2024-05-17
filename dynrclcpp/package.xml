@@ -4,8 +4,9 @@
   <name>dynrclcpp</name>
   <version>0.0.0</version>
   <description>Dynamic ROS2 Client Library in C++</description>
-  <maintainer email="nipun.dhananjaya@gmail.com">nipun</maintainer>
-  <license>Apache License 2.0</license>
+  <maintainer email="nipun.dhananjaya@gmail.com">W.M. Nipun Dhananjaya</maintainer>
+  <license>Apache 2.0</license>
+  <author email="nipun.dhananjaya@gmail.com">W.M. Nipun Dhananjaya</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
