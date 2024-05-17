@@ -12,7 +12,7 @@ The same library can be used with many ROS2 distributions (see [Tested Distro](#
 
 ### Key Features
 
-- [x] `Dynamic Message Type Resolution`: Enables the creation of publishers, subscriptions, service client and service servers, where the message type (or service type) is resolved at runtime, offering greater flexibility and adaptability in complex systems. 
+- [x] `Dynamic Message Type Retrieval`: Enables the creation of publishers, subscriptions, service client and service servers, where the message type (or service type) is resolved at runtime, offering greater flexibility and adaptability in complex systems. 
 - [x] `Flexibility`: Adapt to changing requirements and environments with ease.
 - [x] `Ease of Use`: Simple and intuitive API for seamless integration into your ROS2 projects.
 - [x] `Efficiency`: Optimize resource usage by creating and destroying communication entities as needed, 
