@@ -77,8 +77,8 @@ Check example nodes to understand how to use `dynrclcpp` library to create ROS2 
 
 
 ### TODO
-- [] ROS parameters
-- [] Runtime Configuration: Facilitate the configuration of nodes through external parameters or configuration files, allowing for easy adjestments without the need for recompilation.
+- [ ] ROS parameters
+- [ ] Runtime Configuration: Facilitate the configuration of nodes through external parameters or configuration files, allowing for easy adjestments without the need for recompilation.
 
 </br></br>
 
