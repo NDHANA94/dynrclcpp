@@ -10,11 +10,12 @@ The same library can be used with many ROS2 distributions (see [Tested Distro](#
 
 
 
-### Features
-- **`Dynamic Creation`**: Programmatically generate publishers, subscriptions, service clients, and service servers on-the-fly.
-- **`Flexibility`**: Adapt to changing requirements and environments with ease.
-- **`Ease of Use`**: Simple and intuitive API for seamless integration into your ROS2 projects.
-- **`Efficiency`**: Optimize resource usage by creating and destroying communication entities as needed,
+### Key Features
+
+- [x] `Dynamic Message Type Resolution`: Enables the creation of publishers, subscriptions, service client and service servers, where the message type (or service type) is resolved at runtime, offering greater flexibility and adaptability in complex systems. 
+- [x] `Flexibility`: Adapt to changing requirements and environments with ease.
+- [x] `Ease of Use`: Simple and intuitive API for seamless integration into your ROS2 projects.
+- [x] `Efficiency`: Optimize resource usage by creating and destroying communication entities as needed, 
 
 </br>
 
@@ -75,7 +76,15 @@ Check example nodes to understand how to use `dynrclcpp` library to create ROS2 
 </br></br>
 
 
+### TODO
+
+- [] Runtime Configuration: Facilitate the configuration of nodes through external parameters or configuration files, allowing for easy adjestments without the need for recompilation.
+
+</br></br>
+
 #### Acknowledgements
 
 This `dynrclcpp` library is developed utilizing `dynmsg` library of [ dynamic_message_introspection](https://github.com/osrf/dynamic_message_introspection).
+
+
 
