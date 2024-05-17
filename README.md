@@ -18,7 +18,7 @@ This library allows developers to dynamically create and desstroy ROS2 entities 
 - [x] Galactic: OK
 - [x] Humble: OK
 - [x] Iron: OK
-- [] Jezzy: NOT TESTED
+- [ ] Jezzy: NOT TESTED
 
 ## Instruction:
 
