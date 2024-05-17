@@ -11,6 +11,7 @@ public:
     PoseStampedPublisher(const std::string& name, int argc, char** argv){
         // initialize the node
         node_ = std::make_shared<dynrclcpp::NODE>(name);
+        // node_->set_debug_severity(RCUTILS_LOG_SEVERITY_DEBUG);
         node_->init(argc, argv);
 
         // initialize the publisher
