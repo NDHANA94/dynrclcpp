@@ -177,7 +177,7 @@ void ros_message_destroy(RosMessage * ros_msg)
 }
 
 
-dynmsg_ret_t ros_srv_request_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_req)
+dynmsg_ret_t rossrv_req_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_req)
 {
   const auto* type_info = get_srv_type_info(interface_type);
   if(nullptr == type_info){
@@ -199,12 +199,12 @@ dynmsg_ret_t ros_srv_request_init(const InterfaceTypeName& interface_type, RosSr
   return DYNMSG_RET_OK;
 }
 
-void ros_srv_request_destroy(RosSrvRequest * ros_req){
+void rossrv_req_destroy(RosSrvRequest * ros_req){
   ros_req->type_info->fini_function(ros_req->data);
   delete[] ros_req->data;
 }
 
-dynmsg_ret_t ros_srv_response_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_res)
+dynmsg_ret_t rossrv_res_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_res)
 {
   const auto* type_info = get_srv_type_info(interface_type);
   if(nullptr == type_info){
@@ -226,37 +226,11 @@ dynmsg_ret_t ros_srv_response_init(const InterfaceTypeName& interface_type, RosS
   return DYNMSG_RET_OK;
 }
 
-void ros_srv_response_destroy(RosSrvRequest * ros_res){
+void rossrv_res_destroy(RosSrvRequest * ros_res){
   ros_res->type_info->fini_function(ros_res->data);
   delete[] ros_res->data;
 }
 
-// dynmsg_ret_t ros_srv_response_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_res)
-// {
-//   const auto* type_info = get_srv_type_info(interface_type);
-//   if(nullptr == type_info){
-//     return DYNMSG_RET_ERROR;
-//   }
-
-//   rcutils_allocator_t allocator = rcutils_get_default_allocator();
-//   RCUTILS_LOG_DEBUG_NAMED("dynmsg", "Allocating message buffer of size %ld bytes", type_info->response_members_->size_of_);
-
-//   // Allocate space to store the binary representation of the message
-//   uint8_t * data =
-//     static_cast<uint8_t *>(allocator.allocate(type_info->response_members_->size_of_, allocator.state));
-//   if (nullptr == data) {
-//     return DYNMSG_RET_ERROR;
-//   }
-//   // Initialise the message buffer according to the interface type
-//   type_info->response_members_->init_function(data, ROSIDL_RUNTIME_C_MSG_INIT_ALL);
-//   *ros_res = RosSrvResponse{type_info, data};
-//   return DYNMSG_RET_OK;
-// }
-
-// void ros_srv_response_destroy(RosSrvRequest * ros_res){
-//   ros_res->type_info->response_members_->fini_function(ros_res->data);
-//   delete[] ros_res->data;
-// }
 
 
 }  // namespace c

@@ -160,33 +160,35 @@ void ros_message_destroy(RosMessage * ros_msg);
 void ros_message_destroy_with_allocator(RosMessage * ros_msg, rcutils_allocator_t * allocator);
 
 
+/// @author W.M. Nipun Dhananjaya | 2024
+/// @brief The introspection information for the specified interface type is loaded from its shared library
+/// and stored in the type_info field. The ros_msg buffer is allocated with enough space to store
+/// one ROS service request of the specified type.
+/// When finshed with the RosSrvRequest instance, call ros_srv_request_destroy() to clean up allocated
+/// memory.
+/// @param interface_type An interface type can be identified by its namespace (i.e. the package that stores it) and its type name
+/// @param ros_req pointer to `RosSrvRequest` instance
+/// @return `DYNMSG_RET_OK` or `DYNMSG_RET_ERROR`
+dynmsg_ret_t rossrv_req_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_req); //
 
-/// Initialise a RosSrvRequest structure.
-/**
- * The introspection information for the specified interface type is loaded from its shared library
- * and stored in the type_info field. The ros_req buffer is allocated with enough space to store
- * one ROS request of the specified type.
- * When finshed with the RosSrvRequest instance, call ros_srv_request_destroy() to clean up allocated
- * memory.
- */
-dynmsg_ret_t ros_srv_request_init(const InterfaceTypeName& interface_type, RosSrvRequest* ros_req); //
-
+/// @author W.M. Nipun Dhananjaya | 2024
 /// Clean up a RosSrvRequest instance by freeing its resources.
-void ros_srv_request_destroy(RosSrvRequest * ros_req);
+void rossrv_req_destroy(RosSrvRequest * ros_req);
 
+/// @author W.M. Nipun Dhananjaya | 2024
+/// @brief The introspection information for the specified interface type is loaded from its shared library
+/// and stored in the type_info field. The ros_msg buffer is allocated with enough space to store
+/// one ROS service response of the specified type.
+/// When finshed with the RosSrvResponse instance, call ros_srv_response_destroy() to clean up allocated
+/// memory.
+/// @param interface_type An interface type can be identified by its namespace (i.e. the package that stores it) and its type name
+/// @param ros_req pointer to `RosSrvRequest` instance
+/// @return `DYNMSG_RET_OK` or `DYNMSG_RET_ERROR`
+dynmsg_ret_t rossrv_res_init(const InterfaceTypeName& interface_type, RosSrvResponse* ros_res); //
 
-/// Initialise a RosSrvResponse structure.
-/**
- * The introspection information for the specified interface type is loaded from its shared library
- * and stored in the type_info field. The ros_req buffer is allocated with enough space to store
- * one ROS response of the specified type.
- * When finshed with the RosSrvResponse instance, call ros_srv_response_destroy() to clean up allocated
- * memory.
- */
-dynmsg_ret_t ros_srv_response_init(const InterfaceTypeName& interface_type, RosSrvResponse* ros_res); //
-
+/// @author W.M. Nipun Dhananjaya | 2024
 /// Clean up a RosSrvResponse instance by freeing its resources.
-void ros_srv_response_destroy(RosSrvResponse * ros_res);
+void rossrv_res_destroy(RosSrvResponse * ros_res);
 
 }  // namespace c
 

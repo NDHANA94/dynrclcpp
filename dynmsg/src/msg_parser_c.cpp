@@ -518,14 +518,14 @@ RosMessage yaml_to_rosmsg(
 }
 
 
-RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req){
+RosSrvRequest yaml_to_rossrv_req(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req){
   const auto* type_info = dynmsg::c::get_srv_type_info(interface_type);
   if(nullptr == type_info){
     return {nullptr, nullptr};
   }
   
   RosSrvRequest ros_req;
-  if(DYNMSG_RET_OK != dynmsg::c::ros_srv_request_init(interface_type, &ros_req)){
+  if(DYNMSG_RET_OK != dynmsg::c::rossrv_req_init(interface_type, &ros_req)){
     return {nullptr, nullptr};
   }
 
@@ -534,14 +534,14 @@ RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAM
 }
 
 
-RosSrvRequest yaml_to_response(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res){
+RosSrvRequest yaml_to_rossrv_res(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res){
   const auto* type_info = dynmsg::c::get_srv_type_info(interface_type);
   if(nullptr == type_info){
     return {nullptr, nullptr};
   }
   
   RosSrvRequest ros_res;
-  if(DYNMSG_RET_OK != dynmsg::c::ros_srv_response_init(interface_type, &ros_res)){
+  if(DYNMSG_RET_OK != dynmsg::c::rossrv_res_init(interface_type, &ros_res)){
     return {nullptr, nullptr};
   }
 

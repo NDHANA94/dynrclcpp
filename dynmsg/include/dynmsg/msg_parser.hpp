@@ -57,7 +57,7 @@ RosMessage yaml_and_typeinfo_to_rosmsg(
  * It is not an error for a field of the ROS request to not be specified in the YAML
  * representation; that field will be left uninitialised.
  */
-RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req);  //
+RosSrvRequest yaml_to_rossrv_req(const InterfaceTypeName& interface_type, const YAML::Node& yaml_req);  //
 
 /// Parse a YAML representation of a response into a ROS service response and store it in a raw bytes buffer.
 /**
@@ -68,7 +68,7 @@ RosSrvRequest yaml_to_request(const InterfaceTypeName& interface_type, const YAM
  * It is not an error for a field of the ROS response to not be specified in the YAML
  * representation; that field will be left uninitialised.
  */
-RosSrvRequest yaml_to_response(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res); //
+RosSrvRequest yaml_to_rossrv_res(const InterfaceTypeName& interface_type, const YAML::Node& yaml_res); //
 
 
 

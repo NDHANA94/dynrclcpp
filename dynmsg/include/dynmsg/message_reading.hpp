@@ -54,6 +54,8 @@ YAML::Node message_to_yaml(const RosMessage & message);
  * Each field is represented by two values: the ROS type of the field, in a textual representation,
  * and the value. For an example of the YAML structure, run the CLI tool and echo a topic; the
  * resulting YAML printed to the terminal is the structure used.
+ * 
+ * @author W.M. Nipun Dhananjaya | 2024
  */
 YAML::Node srv_response_to_yaml(const RosSrvResponse & response);
 
@@ -69,6 +71,8 @@ YAML::Node srv_response_to_yaml(const RosSrvResponse & response);
  * Each field is represented by two values: the ROS type of the field, in a textual representation,
  * and the value. For an example of the YAML structure, run the CLI tool and echo a topic; the
  * resulting YAML printed to the terminal is the structure used.
+ * 
+ * @author W.M. Nipun Dhananjaya | 2024
  */
 YAML::Node srv_request_to_yaml(const RosSrvRequest & request);
 

@@ -24,7 +24,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <dynmsg/typesupport.hpp>
+// #include <dynmsg/typesupport.hpp>
 
 #include "dynrclcpp/typesupport_utils.hpp"
 

@@ -47,7 +47,7 @@ std::function<void(const YAML::Node& req, YAML::Node& res)> callback)
         std::thread([this](){
             // initialize service request
             RosSrvRequest req;
-            auto ret = dynmsg::c::ros_srv_request_init(interface_type_, &req);
+            auto ret = dynmsg::c::rossrv_req_init(interface_type_, &req);
             if(ret != DYNMSG_RET_OK){
                 throw std::runtime_error("failed to init request");
             }
@@ -65,7 +65,7 @@ std::function<void(const YAML::Node& req, YAML::Node& res)> callback)
                     //  invoke callback function  
                     callback_(req_yaml, res_yaml);
                     // send response
-                    RosSrvResponse res = dynmsg::c::yaml_to_response(interface_type_, res_yaml);
+                    RosSrvResponse res = dynmsg::c::yaml_to_rossrv_res(interface_type_, res_yaml);
                     ret = rcl_send_response(&service_, &request_header, res.data);
                     if(ret != RCL_RET_OK){
                         std::string err = "failed to send response: "  + std::string(rcl_get_error_string().str);
@@ -73,9 +73,12 @@ std::function<void(const YAML::Node& req, YAML::Node& res)> callback)
                     } else{
                         RCUTILS_LOG_DEBUG_NAMED(name_.c_str(), "Response is sent.");
                     }
+                    // clean up response instance
+                    dynmsg::c::rossrv_res_destroy(&res);
                 }
             }
-
+            // clean up
+            dynmsg::c::rossrv_req_destroy(&req);
         }).detach();
 
         RCUTILS_LOG_INFO_NAMED(name_.c_str(), "service is successfully initialized.");

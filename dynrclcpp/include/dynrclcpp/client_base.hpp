@@ -33,6 +33,7 @@ public:
     /// @param yaml_req request as an instance of YAML::Node 
     void send_request(const YAML::Node& request);
 
+    /// To clean up the created client
     void destroy();
     
     std::chrono::milliseconds response_timeout{5000};

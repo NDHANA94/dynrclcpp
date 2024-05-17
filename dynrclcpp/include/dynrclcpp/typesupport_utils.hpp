@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_
-#define DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_
+#ifndef DYNRCLCPP__TYPESUPPORT_UTILS_HPP_
+#define DYNRCLCPP__TYPESUPPORT_UTILS_HPP_
 
 #include <string>
 #include <utility>
@@ -49,22 +49,37 @@ InterfaceTypeName get_interface_type_name_from_type(const std::string & type);
 // function, when called, provides a pointer to the type support structure for the specified
 // interface type. This pointer is returned. It can be passed to functions such as
 // rcl_subscription_init().
+/// @author W.M. Nipun Dhananjaya | 2024
 const rosidl_message_type_support_t * get_msg_type_support(const std::string& type);
 
+// Search for and load the type support library for a single interface type.
+// This function will search the system's configured library search paths (which should include the
+// ROS paths) to find a dynamic library named following the pattern
+// "lib[namespace]__rosidl_typesupport_c.so".
+// When found, it opens that library and loads a function named following the pattern
+// "rosidl_typesupport_c__get_service_type_support_handle__[namespace]__srv__[type]". This
+// function, when called, provides a pointer to the type support structure for the specified
+// interface type. This pointer is returned. It can be passed to functions such as
+// rcl_subscription_init().
+/// @author W.M. Nipun Dhananjaya | 2024
 const rosidl_service_type_support_t * get_srv_type_support(const std::string& type);
 
 
-// Convert a YAML::Node value to a string
+/// Convert a YAML::Node value to a string
+/// @author W.M. Nipun Dhananjaya | 2024
 const std::string yaml_to_string(YAML::Node node);
 
-// Convert a YAML::Node value to a vector of integers
+/// Convert a YAML::Node value to a vector of integers
+/// @author W.M. Nipun Dhananjaya | 2024
 std::vector<int> yaml_to_int_vector(YAML::Node node);
 
-// Convert a YAML::Node value to a vector of floats
+/// Convert a YAML::Node value to a vector of floats
+/// @author W.M. Nipun Dhananjaya | 2024
 std::vector<float> yaml_to_float_vector(YAML::Node node);
 
-// Convert a YAML::Node value to a vector of double
+/// Convert a YAML::Node value to a vector of double
+/// @author W.M. Nipun Dhananjaya | 2024
 std::vector<double> yaml_to_double_vector(YAML::Node node);
 
 }  // extern "C"
-#endif  // DYNMSG_DEMO__TYPESUPPORT_UTILS_HPP_
+#endif  // DYNRCLCPP__TYPESUPPORT_UTILS_HPP_

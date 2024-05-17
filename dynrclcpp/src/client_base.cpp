@@ -48,10 +48,10 @@ void Client::send_request(const YAML::Node& request){
     try{
         std::thread([this, request](){
         
-        RosSrvRequest req = dynmsg::c::yaml_to_request(interface_type_, request);
+        RosSrvRequest req = dynmsg::c::yaml_to_rossrv_req(interface_type_, request);
         
         RosSrvResponse res;
-        auto ret = dynmsg::c::ros_srv_response_init(interface_type_, &res);
+        auto ret = dynmsg::c::rossrv_res_init(interface_type_, &res);
         if(ret != DYNMSG_RET_OK){
             throw std::runtime_error("failed to init response");
         }
@@ -96,8 +96,8 @@ void Client::send_request(const YAML::Node& request){
 
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
         // clean up
-        dynmsg::c::ros_srv_request_destroy(&req);
-        dynmsg::c::ros_srv_response_destroy(&res);
+        dynmsg::c::rossrv_req_destroy(&req);
+        dynmsg::c::rossrv_res_destroy(&res);
         }).detach();
     }
     catch(const std::runtime_error & e){
