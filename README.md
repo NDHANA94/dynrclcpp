@@ -1,8 +1,7 @@
 # dynrclcpp
 Dynamic ROS 2 client library
 
-
-This library empowers developers with the ability to dynamically create and destroy ROS2 publishers, subscriptions, service clients, and service servers. Whether you're dealing with rapidly changing environments or need fine-gained control over your ROS2 communication channels, this library provides the flexibility and scalability you need.
+This library allows developers to dynamically create and desstroy ROS2 entities such as *publishers, subscriptions, service clients* and *service servers*. 
 
 
 ### Features
@@ -13,11 +12,13 @@ This library empowers developers with the ability to dynamically create and dest
 
 </br>
 
-- Foxy: OK 
-- Galactic: OK
-- Humble: OK
-- Iron: OK
-- Jezzy: NOT TESTED
+### Tested Distro
+
+- [x] Foxy: OK 
+- [x] Galactic: OK
+- [x] Humble: OK
+- [x] Iron: OK
+- [] Jezzy: NOT TESTED
 
 ## Instruction:
 
