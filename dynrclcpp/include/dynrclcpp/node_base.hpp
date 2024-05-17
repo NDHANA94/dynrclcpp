@@ -30,13 +30,13 @@
 #include "dynrclcpp/timer_base.hpp"
 #include "dynrclcpp/client_base.hpp"
 #include "dynrclcpp/service_base.hpp"
-
 #include "dynrclcpp/typesupport_utils.hpp"
 
 #include "dynmsg/message_reading.hpp"
 
 #include "rcutils/logging.h"
 #include "rcutils/logging_macros.h"
+#include "rcutils/time.h"
 
 #include "rcl/error_handling.h"
 #include "rcl/rcl.h"
@@ -56,6 +56,8 @@ namespace dynrclcpp{
 /// service servers, service clients. 
 class NODE{
 public:
+    const std::string node_name;
+
     /// @brief Constructor
     /// @param node_name_ : name of the node
     NODE(const std::string node_name_):node_name(node_name_){};
@@ -206,9 +208,9 @@ public:
     nlohmann::json get_nodes_info();
     nlohmann::json get_node_info(const std::string& node_name_);
     
+    
 
 
-    const std::string node_name;
 private:
     /// @brief to execute cli command 
     /// @param cmd : command to execute as a string
@@ -242,8 +244,10 @@ private:
 
 };
 
+// returns time stamp (sec, nanosec) as a YAML::Node instance
+YAML::Node timestamp_yaml();
 
-
+// to keep the node alive
 void spin();
 
 }

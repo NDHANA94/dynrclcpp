@@ -478,6 +478,20 @@ std::string NODE::yamlToString(const YAML::Node& yaml){
   return stream.str();
 }
 
+YAML::Node timestamp_yaml(){
+    YAML::Node ts;
+
+    rcutils_time_point_value_t now_;
+    auto ret = rcutils_system_time_now(&now_);
+    if(ret != RCL_RET_OK){
+        RCUTILS_LOG_ERROR_NAMED("node_name", "Failed to get current time: %s /n", rcutils_get_error_string().str);
+        ts["sec"] = 0;
+        ts["nanosec"] = 0;
+    }
+    ts["sec"] = (int32_t)(now_ / 1000000000);
+    ts["nanosec"] = (uint32_t)(now_ % 1000000000);
+    return ts;
+}
 
 void spin(){
   while(true){

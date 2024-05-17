@@ -2,8 +2,8 @@
 Dynamic ROS 2 client library
 
 
-This library empowers developers with the ability to dynamically create and destroy publishers, subscriptions, service clients, and service servers within the ROS2 ecosystem. Whether you're dealing with rapidly changing environments or need fine-gained control over your ROS2 communication channels, this library provides the flexibility and scalability you need.
-
+This library empowers developers with the ability to dynamically create and destroy ROS2 publishers, subscriptions, service clients, and service servers. Whether you're dealing with rapidly changing environments or need fine-gained control over your ROS2 communication channels, this library provides the flexibility and scalability you need.
+cd ..
 ### Features
 - **Dynamic Creation**: Programmatically generate publishers, subscriptions, service clients, and service servers on-the-fly.
 - **Flexibility**: Adapt to changing requirements and environments with ease.

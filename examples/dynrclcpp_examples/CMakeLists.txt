@@ -75,6 +75,19 @@ ament_target_dependencies(
   "ament_index_cpp"
 )
 
+add_executable(pose_stamped_publisher src/pose_stamped_publisher.cpp)
+target_include_directories(pose_stamped_publisher PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+ament_target_dependencies(
+  pose_stamped_publisher
+  "rcl"
+  "rcl_action"
+  "dynmsg"
+  "dynrclcpp"
+  "ament_index_cpp"
+)
+
 
 add_executable(string_subscriber src/string_subscriber.cpp)
 target_include_directories(string_subscriber PUBLIC
@@ -147,6 +160,7 @@ install(TARGETS
   int_publisher
   multi_int32_publisher
   point_publisher
+  pose_stamped_publisher
   string_subscriber
   int_subscriber
   multi_float64_subscriber
