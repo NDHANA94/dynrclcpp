@@ -29,7 +29,7 @@ To create a node with dynamic ROS 2 entities, follow the steps metioned below:
     sudo apt update
     sudo apt-get install nlohmann-json3-dev
     sudo apt install libyaml-cpp-dev
-```
+    ```
 - Clone the `dynrclcpp` library into the src directory of your ROS2 workspace.
     ```
     cd ~/ros2_ws/src
@@ -48,6 +48,9 @@ To create a node with dynamic ROS 2 entities, follow the steps metioned below:
     ```
 
 ## Examples:
+
+Check example nodes to understand how to use `dynrclcpp` library to create ROS2 node entities. 
+
 - Publishers:
     - [`String` publisher](examples/dynrclcpp_examples/src/string_publisher.cpp)
     - [`Int32` publisher](examples/dynrclcpp_examples/src/int_publisher.cpp)
@@ -64,6 +67,7 @@ To create a node with dynamic ROS 2 entities, follow the steps metioned below:
     - [`AddTwoInts` server](examples/dynrclcpp_examples/src/add_two_ints_service.cpp)
 
 </br></br>
+
 
 #### Acknowledgements
 
