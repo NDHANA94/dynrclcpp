@@ -14,11 +14,11 @@ This library allows developers to dynamically create and desstroy ROS2 entities 
 
 ### Tested Distro
 
-- [x] Foxy: OK 
-- [x] Galactic: OK
-- [x] Humble: OK
-- [x] Iron: OK
-- [ ] Jezzy: NOT TESTED
+- [x] Fox
+- [x] Galactic
+- [x] Humble
+- [x] Iron
+- [ ] Jezzy
 
 ## Instruction:
 
