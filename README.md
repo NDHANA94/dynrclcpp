@@ -11,11 +11,21 @@ This library empowers developers with the ability to dynamically create and dest
 - **`Ease of Use`**: Simple and intuitive API for seamless integration into your ROS2 projects.
 - **`Efficiency`**: Optimize resource usage by creating and destroying communication entities as needed,
 
+</br>
+- foxy: OK
+- galactic: OK
+- humble: 
 
 ## Instruction:
 
 To create a node with dynamic ROS 2 entities, follow the steps metioned below:
 
+- Install dependencies:
+```
+sudo apt update
+sudo apt-get install nlohmann-json3-dev
+sudo apt install libyaml-cpp-dev
+```
 - Clone the `dynrclcpp` library into the src directory of your ROS2 workspace.
     ```
     cd ~/ros2_ws/src
